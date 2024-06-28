@@ -24,6 +24,7 @@ class Status(BaseModel):
 class Syntax(BaseModel):
     """Your task is to generate a bash command to interact with programs
     using the Python subprocess package."""
+
     command: str = Field(description="bash command to interact with programs")
 
     def execute(self) -> Status:
@@ -33,17 +34,26 @@ class Syntax(BaseModel):
                 text=True,
                 check=True,
                 shell=True,  # todo: REMOVE shell=True (dangerous)
-                capture_output=True  # This captures both stdout and stderr
+                capture_output=True,  # This captures both stdout and stderr
             )
-            output = result.stdout if result.stdout else "Command executed successfully, but produced no output."
+            output = (
+                result.stdout
+                if result.stdout
+                else "Command executed successfully, but produced no output."
+            )
             return Status(response=output, success=True, code=0)
         except subprocess.CalledProcessError as e:
             print(f"Command failed with return code {e.returncode}")
-            output = e.stderr if e.stderr else f"Command failed with return code {e.returncode}"
+            output = (
+                e.stderr
+                if e.stderr
+                else f"Command failed with return code {e.returncode}"
+            )
             return Status(response=output, success=False, code=e.returncode)
         except Exception as e:
             print(f"An unexpected error occurred: {str(e)}")
             return Status(response=str(e), success=False, code=1)
+
 
 class Feedback(BaseModel):
     """Your task is to generate a final message to the action(s) performed.
