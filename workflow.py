@@ -11,12 +11,10 @@ class Agent:
     @property
     def plan(self):
         _ = run(query=self.request, model=Plan)
-        print("Plan", _)
         return _.steps
 
     def run(self):
         for action in self.plan:
-            print("Action", action)
             iteration = 0
             successful = False
             prompt = f"Instruction: {action} \nCompleted Tasks: {self.state} "
