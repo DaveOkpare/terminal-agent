@@ -15,6 +15,6 @@ def run(query: str, model: BaseModel = None):
     request = client.chat.completions.create(
         model=os.getenv("MODEL", "gpt-4o"),
         messages=[{"role": "user", "content": query}],
-        response_model=model,  # todo: add a response model to synthesis final answer
+        response_model=model,
     )
     return request

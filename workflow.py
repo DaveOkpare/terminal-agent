@@ -5,7 +5,7 @@ from main import run
 class Agent:
     def __init__(self, request: str) -> None:
         self.request = request
-        self.state = []
+        self.state = ""
         self.max_iterations = 3
 
     @property
@@ -17,23 +17,17 @@ class Agent:
         for action in self.plan:
             iteration = 0
             successful = False
-            prompt = f"Instruction: {action} \nCompleted Tasks: {self.state} "
+            prompt = f"Instruction: {action} \nPrevious Task: {self.state} "
 
             while not successful and iteration < self.max_iterations:
                 print(prompt)
                 status = run(query=prompt, model=Syntax).execute()
-                feedback, successful, code = (
-                    status.response,
-                    status.success,
-                    status.code,
-                )
+                feedback, successful = (status.response, status.success)
                 print(feedback, successful)
                 if successful:
-                    self.state.append(action.step)
+                    self.state = action.step
                 else:
                     prompt += f"\nFeedback: {feedback}"
-                    # if code == 1:
-                    #     self.state.append(action.step)
 
                 iteration += 1
 
@@ -41,14 +35,12 @@ class Agent:
                 break
 
         response = run(
-            query=f"Request: {self.request} \nPlan: {self.plan} \nCompleted Tasks: {self.state} \nFeedback: {feedback}",
+            query=f"Request: {self.request} \nPlan: {self.plan} \nCurrent State: {self.state} \nFeedback: {feedback}",
             model=Feedback,
         )
         return response.message
 
 
 if __name__ == "__main__":
-    a = Agent(
-        request="what are all the files in my current directory, find david.txt and if it doesnt exist create it and write hello world in it"
-    )
+    a = Agent()
     print(a.run())

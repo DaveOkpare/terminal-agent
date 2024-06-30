@@ -18,7 +18,6 @@ class Plan(BaseModel):
 class Status(BaseModel):
     response: str
     success: bool
-    code: int
 
 
 class Syntax(BaseModel):
@@ -57,6 +56,6 @@ class Syntax(BaseModel):
 
 class Feedback(BaseModel):
     """Your task is to generate a final message to the action(s) performed.
-    You will be provided with the user request, completed tasks and feedback."""
+    You will be provided with the user request, current state and feedback."""
 
     message: str
