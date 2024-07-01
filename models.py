@@ -1,6 +1,7 @@
 import subprocess
 from typing import List
 from pydantic import BaseModel, Field
+from rich import print
 
 
 class Step(BaseModel):
@@ -28,6 +29,7 @@ class Syntax(BaseModel):
 
     def execute(self) -> Status:
         try:
+            print(f"Running [green]{self.command}[/green]")
             result = subprocess.run(
                 self.command,
                 text=True,
