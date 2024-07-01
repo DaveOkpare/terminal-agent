@@ -1,0 +1,56 @@
+diff --git a/main.py b/main.py
+index c84a13e..e69de29 100644
+--- a/main.py
++++ b/main.py
+@@ -1,20 +0,0 @@
+-import os
+-import instructor
+-from openai import OpenAI
+-from dotenv import load_dotenv
+-from pydantic import BaseModel
+-
+-load_dotenv()
+-
+-os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
+-
+-client = instructor.from_openai(OpenAI())
+-
+-
+-def run(query: str, model: BaseModel = None):
+-    request = client.chat.completions.create(
+-        model=os.getenv("MODEL", "gpt-4o"),
+-        messages=[{"role": "user", "content": query}],
+-        response_model=model,
+-    )
+-    return request
+diff --git a/workflow.py b/workflow.py
+index 9ec54ad..03bbeb1 100644
+--- a/workflow.py
++++ b/workflow.py
+@@ -1,5 +1,25 @@
++import os
++import instructor
++from openai import OpenAI
++from dotenv import load_dotenv
++from pydantic import BaseModel
++
+ from models import Feedback, Plan, Syntax
+-from main import run
++
++load_dotenv()
++
++os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
++
++client = instructor.from_openai(OpenAI())
++
++
++def run(query: str, model: BaseModel = None):
++    request = client.chat.completions.create(
++        model=os.getenv("MODEL", "gpt-4o"),
++        messages=[{"role": "user", "content": query}],
++        response_model=model,
++    )
++    return request
+ 
+ 
+ class Agent:
