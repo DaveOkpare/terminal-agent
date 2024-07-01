@@ -25,7 +25,7 @@ def run(query: str, model: BaseModel = None):
 class Agent:
     def __init__(self, request: str) -> None:
         self.request = request
-        self.state = []
+        self.state = {}
         self.max_iterations = 3
 
     @property
@@ -43,7 +43,8 @@ class Agent:
                 status = run(query=prompt, model=Syntax).execute()
                 feedback, successful = (status.response, status.success)
                 if successful:
-                    self.state.append({"task": action.step, "output": feedback})
+                    self.state["task"] = action.step
+                    self.state["output"] = feedback
                 else:
                     prompt += f"\nFeedback: {feedback}"
 
