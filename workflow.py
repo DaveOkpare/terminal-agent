@@ -25,7 +25,7 @@ def run(query: str, model: BaseModel = None):
 class Agent:
     def __init__(self, request: str) -> None:
         self.request = request
-        self.state = ""
+        self.state = {}
         self.max_iterations = 3
 
     @property
@@ -45,7 +45,8 @@ class Agent:
                 feedback, successful = (status.response, status.success)
                 print(feedback, successful)
                 if successful:
-                    self.state = action.step
+                    self.state["task"] = action.step
+                    self.state["output"] = feedback
                 else:
                     prompt += f"\nFeedback: {feedback}"
 
@@ -55,12 +56,14 @@ class Agent:
                 break
 
         response = run(
-            query=f"Request: {self.request} \nPlan: {self.plan} \nCurrent State: {self.state} \nFeedback: {feedback}",
+            query=f"Request: {self.request} \nPlan: {self.plan} \nPrevious Task: {self.state} \nFeedback: {feedback}",
             model=Feedback,
         )
         return response.message
 
 
 if __name__ == "__main__":
-    a = Agent()
+    a = Agent(
+        "Read the content of the staged file and write a commit message for it. Also commit it"
+    )
     print(a.run())
