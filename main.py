@@ -9,24 +9,19 @@ from workflow import Agent
 cwd = os.getcwd()
 
 
-def main():
-    print("\n[bold green]Welcome to the Terminal Agent![/bold green]")
-    print("[bold green]--------------------------------[/bold green]\n")
+def main(prompt: str):
+    print(f"Action: [bold green]{prompt}[/bold green]\n")
 
-    while True:
-        action = typer.prompt("\nWhat action do want the agent to complete?")
-        print(f"Action: [bold green]{action}[/bold green]\n")
+    agent = Agent(prompt)
 
-        agent = Agent(action)
-
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            transient=True,
-        ) as progress:
-            progress.add_task(description="Processing...", total=None)
-            output = agent.run()
-            print(f"\n{output}")
+    with Progress(
+        SpinnerColumn(),
+        TextColumn("[progress.description]{task.description}"),
+        transient=True,
+    ) as progress:
+        progress.add_task(description="Processing...", total=None)
+        output = agent.run()
+        print(f"\n{output}")
 
 
 if __name__ == "__main__":
