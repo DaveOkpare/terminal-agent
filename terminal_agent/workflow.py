@@ -4,7 +4,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-from models import Feedback, Plan, Syntax
+from .models import Feedback, Plan, Syntax
 
 load_dotenv()
 

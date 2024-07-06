@@ -4,14 +4,14 @@ import typer
 from rich import print
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from workflow import Agent
+from .workflow import Agent
 
 
 cwd = os.getcwd()
 app = typer.Typer()
 
 
-@app.command()
+@app.command(help="Use to query/prompt the agent.")
 def prompt(message: str):
     print(f"Action: [bold green]{message}[/bold green]\n")
 
@@ -32,7 +32,7 @@ def key_prompt():
     return key
 
 
-@app.command("set")
+@app.command("set", help="Use to set OPENAI_API_KEY key.")
 def set_api_key(
     key: Annotated[
         str,
@@ -48,7 +48,3 @@ def set_api_key(
     with open(path, "+a") as f:
         f.write(f"OPENAI_API_KEY={key}")
     print(f"Key stored at {path}")
-
-
-if __name__ == "__main__":
-    app()
